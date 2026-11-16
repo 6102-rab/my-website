@@ -1,1 +1,1171 @@
 # my-website
+import os
+
+html_content = """<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZLATAN IBRAHIMOVIĆ | The King &amp; Legend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-obsidian: #0b0b0e;
+      --bg-surface: #131318;
+      --bg-card: #18181f;
+      --bg-card-hover: #20202a;
+      --gold-primary: #d4af37;
+      --gold-light: #f3d98b;
+      --gold-dark: #9c7c1c;
+      --gold-border: rgba(212, 175, 55, 0.25);
+      --gold-glow: rgba(212, 175, 55, 0.14);
+      --text-main: #f5f5f7;
+      --text-muted: #a3a3b2;
+      --text-dim: #727282;
+      --font-display: 'Cinzel', 'Noto Serif JP', serif;
+      --font-serif: 'Noto Serif JP', serif;
+      --font-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-obsidian);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 48%),
+        radial-gradient(circle at 85% 35%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+        var(--bg-obsidian);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 11, 14, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gold-border);
+    }
+
+    .nav-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0.95rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--gold-primary);
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      font-size: 1.05rem;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--gold-primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      box-shadow: 0 0 14px var(--gold-glow);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      transition: color 0.25s ease;
+    }
+
+    nav a:hover {
+      color: var(--gold-light);
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 5.5rem 1.5rem 4.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .crown-emblem {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.5rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.03));
+      border: 1px solid var(--gold-border);
+      box-shadow: 0 0 32px var(--gold-glow);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-display);
+      color: var(--gold-primary);
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.1rem, 5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: linear-gradient(135deg, #fff8dc 0%, var(--gold-light) 45%, var(--gold-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-en {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      letter-spacing: 0.32em;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-desc {
+      max-width: 680px;
+      margin: 0 auto 2.8rem;
+      color: var(--text-muted);
+      font-size: 1.02rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+      color: #0b0b0e;
+      font-weight: 700;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.25);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-light);
+      font-weight: 500;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--gold-border);
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .btn-outline:hover {
+      background: rgba(212, 175, 55, 0.1);
+      border-color: var(--gold-primary);
+    }
+
+    /* Stats Strip */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--gold-border);
+      border-radius: 16px;
+      padding: 1.75rem 1rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .stat-item {
+      padding: 0.5rem;
+      border-right: 1px solid rgba(212, 175, 55, 0.14);
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Sections Common */
+    section {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.65rem, 3.2vw, 2.3rem);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      margin: 1rem auto 0;
+    }
+
+    /* Profile Section */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+    }
+
+    .profile-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .profile-table tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .profile-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .profile-table th {
+      text-align: left;
+      padding: 0.85rem 0.5rem;
+      color: var(--gold-primary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      width: 36%;
+    }
+
+    .profile-table td {
+      padding: 0.85rem 0.5rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .bio-card h3 {
+      font-family: var(--font-serif);
+      color: var(--gold-light);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .bio-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.1rem;
+      font-size: 0.97rem;
+    }
+
+    .traits-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.25rem;
+    }
+
+    .trait-pill {
+      font-size: 0.82rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--gold-border);
+      color: var(--gold-light);
+    }
+
+    /* Career Timeline Section */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .filter-btn {
+      background: var(--bg-surface);
+      color: var(--text-muted);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      font-family: var(--font-sans);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--gold-primary);
+      color: var(--gold-light);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+      color: #0b0b0e;
+      font-weight: 700;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.28);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2.2rem;
+      border-left: 2px solid rgba(212, 175, 55, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      transition: transform 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+    }
+
+    .timeline-item.hidden {
+      display: none;
+    }
+
+    .timeline-item:hover {
+      transform: translateX(4px);
+      border-color: var(--gold-primary);
+      background: var(--bg-card-hover);
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -2.68rem;
+      top: 1.75rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      border: 3px solid var(--bg-obsidian);
+      box-shadow: 0 0 12px var(--gold-primary);
+    }
+
+    .timeline-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-year {
+      font-family: var(--font-display);
+      color: var(--gold-primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .timeline-country {
+      font-size: 0.78rem;
+      padding: 0.2rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .timeline-club {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.45rem;
+    }
+
+    .timeline-desc {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+    }
+
+    .timeline-honors {
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Quotes Section */
+    .quote-spotlight {
+      background: linear-gradient(145deg, #1b1a22 0%, #111116 100%);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 20px;
+      padding: 2.75rem 2.25rem;
+      text-align: center;
+      margin-bottom: 2.75rem;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 0 40px rgba(212, 175, 55, 0.05);
+    }
+
+    .spotlight-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.14);
+      border: 1px solid var(--gold-border);
+      padding: 0.3rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .spotlight-ja {
+      font-family: var(--font-serif);
+      font-size: clamp(1.3rem, 2.8vw, 1.95rem);
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .spotlight-en {
+      font-family: var(--font-display);
+      font-size: 0.98rem;
+      color: var(--gold-primary);
+      font-style: italic;
+      margin-bottom: 0.85rem;
+    }
+
+    .spotlight-context {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 1.75rem;
+    }
+
+    .spotlight-controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .quote-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold-primary);
+      background: var(--bg-card-hover);
+    }
+
+    .quote-mark {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--gold-primary);
+      opacity: 0.7;
+      margin-bottom: 0.4rem;
+    }
+
+    .quote-card-ja {
+      font-family: var(--font-serif);
+      font-size: 1.04rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.55rem;
+      line-height: 1.55;
+    }
+
+    .quote-card-en {
+      font-size: 0.82rem;
+      color: var(--gold-primary);
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+
+    .quote-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .copy-mini-btn {
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 6px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .copy-mini-btn:hover {
+      background: rgba(212, 175, 55, 0.28);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+      color: #0b0b0e;
+      font-weight: 700;
+      padding: 0.8rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--gold-border);
+      padding: 2.75rem 1.5rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-top: 2rem;
+    }
+
+    footer strong {
+      font-family: var(--font-display);
+      color: var(--gold-primary);
+      letter-spacing: 0.16em;
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 820px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stat-item:nth-child(2) {
+        border-right: none;
+      }
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+      nav ul {
+        gap: 1.1rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-container {
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .timeline {
+        padding-left: 1.5rem;
+      }
+      .timeline-item::before {
+        left: -1.98rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <span class="brand-badge">ZI</span>
+        <span>ZLATAN // LEGEND</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#profile">プロフィール</a></li>
+          <li><a href="#career">経歴</a></li>
+          <li><a href="#quotes">格言</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="crown-emblem" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 17l3-11 7 6 7-6 3 11H2z" />
+          <path d="M2 20h20" />
+        </svg>
+      </div>
+      <p class="hero-eyebrow">The King &amp; Legend of Football</p>
+      <h1>ズラタン・イブラヒモビッチ</h1>
+      <p class="hero-en">ZLATAN IBRAHIMOVIĆ</p>
+      <p class="hero-desc">
+        195cmの巨躯にテコンドー黒帯の柔軟性を宿し、常識を覆すスーパーゴールと揺るぎない自己肯定感で世界中のスタジアムを支配した孤高のカリスマ。
+      </p>
+      <div class="hero-actions">
+        <a href="#career" class="btn-gold">伝説の経歴を見る</a>
+        <a href="#quotes" class="btn-outline">ズラタンの格言へ</a>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">570+</div>
+          <div class="stat-label">キャリア通算得点</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">34</div>
+          <div class="stat-label">獲得主要タイトル</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">12</div>
+          <div class="stat-label">欧州4カ国リーグ制覇</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">62</div>
+          <div class="stat-label">スウェーデン代表最多得点</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile -->
+    <section id="profile">
+      <div class="section-header">
+        <span class="section-tag">Profile &amp; Aura</span>
+        <h2 class="section-title">孤高のストライカーの素顔</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="profile-grid">
+        <div class="card">
+          <table class="profile-table">
+            <tr>
+              <th>氏名</th>
+              <td>ズラタン・イブラヒモビッチ</td>
+            </tr>
+            <tr>
+              <th>生年月日</th>
+              <td>1981年10月3日</td>
+            </tr>
+            <tr>
+              <th>出身地</th>
+              <td>スウェーデン・マルメ</td>
+            </tr>
+            <tr>
+              <th>身長 / 体重</th>
+              <td>195 cm / 95 kg</td>
+            </tr>
+            <tr>
+              <th>ポジション</th>
+              <td>フォワード（センターフォワード）</td>
+            </tr>
+            <tr>
+              <th>利き足</th>
+              <td>右足（両足で高精度のシュート）</td>
+            </tr>
+            <tr>
+              <th>代表的愛称</th>
+              <td>イブラ、王（King）、ライオン、神</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="card bio-card">
+          <h3>「俺がズラタンだ」——唯一無二のプレースタイル</h3>
+          <p>
+            スウェーデン南部の移民街ローゼンゴード地区で育ったイブラヒモビッチは、幼少期から培ったテコンドー（黒帯）の身体操作とストリートサッカーの創造性を融合させ、現代フットボールに類を見ないストライカー像を確立しました。
+          </p>
+          <p>
+            屈強なディフェンダーを背負いながら涼しい顔でボールを収めるフィジカル、空中で体を捻りながら叩き込むアクロバティックなボレーやヒールキック、そして30メートル超の無回転ミドルまで、あらゆる角度からゴールを奪い続けました。
+          </p>
+          <p>
+            オランダ、イタリア、スペイン、フランス、イングランド、アメリカと渡り歩いたほぼすべてのクラブにタイトルをもたらした「優勝請負人」であり、自らを三人称「ズラタン」で語る強気な発言の裏には、誰よりもストイックな自己鍛錬がありました。
+          </p>
+          <div class="traits-list">
+            <span class="trait-pill">テコンドー黒帯の柔軟性</span>
+            <span class="trait-pill">4カ国リーグ制覇</span>
+            <span class="trait-pill">FIFAプスカシュ賞受賞</span>
+            <span class="trait-pill">セリエA得点王 2回</span>
+            <span class="trait-pill">リーグ・アン得点王 3回</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Timeline -->
+    <section id="career">
+      <div class="section-header">
+        <span class="section-tag">Career Chronicle</span>
+        <h2 class="section-title">欧州と世界を制した経歴タイムライン</h2>
+        <div class="divider"></div>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="時代・地域フィルター">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="early">初期・オランダ</button>
+        <button class="filter-btn" data-filter="italy">イタリア時代</button>
+        <button class="filter-btn" data-filter="spain-france">スペイン・フランス</button>
+        <button class="filter-btn" data-filter="eng-usa-return">イングランド・アメリカ・帰還</button>
+      </div>
+
+      <div class="timeline" id="timeline-list">
+        <article class="timeline-item" data-era="early">
+          <div class="timeline-top">
+            <span class="timeline-year">1999 – 2001</span>
+            <span class="timeline-country">スウェーデン / 初期</span>
+          </div>
+          <h3 class="timeline-club">マルメFF（Malmö FF）</h3>
+          <p class="timeline-desc">
+            地元マルメでプロキャリアをスタート。2部降格を経験するも、圧倒的なドリブルと得点力でチームを1部復帰へ導き、欧州ビッグクラブの注目を集める。
+          </p>
+        </article>
+
+        <article class="timeline-item" data-era="early">
+          <div class="timeline-top">
+            <span class="timeline-year">2001 – 2004</span>
+            <span class="timeline-country">オランダ / エールディヴィジ</span>
+          </div>
+          <h3 class="timeline-club">アヤックス・アムステルダム（AFC Ajax）</h3>
+          <p class="timeline-desc">
+            名門アヤックスへ移籍し才能が一気に開花。2004年のNACブレダ戦で見せた「ディフェンダー5人を次々とかわして決めた伝説のゴール」はサッカー史に残る名場面となった。
+          </p>
+          <div class="timeline-honors">★ エールディヴィジ優勝 2回（2001-02, 2003-04）</div>
+        </article>
+
+        <article class="timeline-item" data-era="italy">
+          <div class="timeline-top">
+            <span class="timeline-year">2004 – 2006</span>
+            <span class="timeline-country">イタリア / セリエA</span>
+          </div>
+          <h3 class="timeline-club">ユヴェントスFC（Juventus）</h3>
+          <p class="timeline-desc">
+            世界最高峰の守備陣が揃うセリエAへ挑戦。加入1年目から16得点を挙げて主力に定着し、ポストプレーとフィジカルの強さを磨き上げた。
+          </p>
+        </article>
+
+        <article class="timeline-item" data-era="italy">
+          <div class="timeline-top">
+            <span class="timeline-year">2006 – 2009</span>
+            <span class="timeline-country">イタリア / セリエA</span>
+          </div>
+          <h3 class="timeline-club">インテル・ミラノ（Inter Milan）</h3>
+          <p class="timeline-desc">
+            インテルの絶対的エースとして君臨し、セリエA 3連覇の原動力に。2008-09シーズンには最終節の鮮やかなヒール弾を含む25得点で初のセリエA得点王を獲得。
+          </p>
+          <div class="timeline-honors">★ セリエA優勝 3回 / 2008-09 セリエA得点王</div>
+        </article>
+
+        <article class="timeline-item" data-era="spain-france">
+          <div class="timeline-top">
+            <span class="timeline-year">2009 – 2010</span>
+            <span class="timeline-country">スペイン / ラ・リーガ</span>
+          </div>
+          <h3 class="timeline-club">FCバルセロナ（FC Barcelona）</h3>
+          <p class="timeline-desc">
+            リーガ開幕5試合連続ゴールのクラブ記録を樹立し、エル・クラシコでも決勝ボレー弾を記録。1シーズンの在籍ながらリーグ優勝やFIFAクラブW杯など4冠に貢献。
+          </p>
+          <div class="timeline-honors">★ ラ・リーガ優勝 / FIFAクラブワールドカップ優勝</div>
+        </article>
+
+        <article class="timeline-item" data-era="italy">
+          <div class="timeline-top">
+            <span class="timeline-year">2010 – 2012</span>
+            <span class="timeline-country">イタリア / セリエA</span>
+          </div>
+          <h3 class="timeline-club">ACミラン（AC Milan）</h3>
+          <p class="timeline-desc">
+            イタリアへ復帰すると、ミランに7シーズンぶりのスクデットをもたらす。翌2011-12シーズンにはキャリアハイのリーグ28得点を挙げ、2度目のセリエA得点王に輝いた。
+          </p>
+          <div class="timeline-honors">★ セリエA優勝（2010-11）/ 2011-12 セリエA得点王</div>
+        </article>
+
+        <article class="timeline-item" data-era="spain-france">
+          <div class="timeline-top">
+            <span class="timeline-year">2012 – 2016</span>
+            <span class="timeline-country">フランス / リーグ・アン</span>
+          </div>
+          <h3 class="timeline-club">パリ・サンジェルマン（Paris Saint-Germain）</h3>
+          <p class="timeline-desc">
+            新時代のPSGを象徴する「王」として君臨。リーグ・アン4連覇と3度の得点王を達成し、公式戦180試合156得点の驚異的な数字を残して伝説となった。
+          </p>
+          <div class="timeline-honors">★ リーグ・アン優勝 4回 / リーグ・アン得点王 3回</div>
+        </article>
+
+        <article class="timeline-item" data-era="eng-usa-return">
+          <div class="timeline-top">
+            <span class="timeline-year">2016 – 2018</span>
+            <span class="timeline-country">イングランド / プレミアリーグ</span>
+          </div>
+          <h3 class="timeline-club">マンチェスター・ユナイテッド（Manchester United）</h3>
+          <p class="timeline-desc">
+            「35歳でプレミアは通用しない」という懐疑論を一蹴し、加入1年目で公式戦28得点。EFLカップ決勝での2得点やUEFAヨーロッパリーグ制覇など3冠に貢献。
+          </p>
+          <div class="timeline-honors">★ UEFAヨーロッパリーグ優勝 / EFLカップ優勝</div>
+        </article>
+
+        <article class="timeline-item" data-era="eng-usa-return">
+          <div class="timeline-top">
+            <span class="timeline-year">2018 – 2019</span>
+            <span class="timeline-country">アメリカ / MLS</span>
+          </div>
+          <h3 class="timeline-club">ロサンゼルス・ギャラクシー（LA Galaxy）</h3>
+          <p class="timeline-desc">
+            デビュー戦となったLAダービーで途中出場から40メートル超の衝撃ボレー弾を含む2得点を決め逆転勝利。MLS通算58試合53得点と規格外の活躍を見せた。
+          </p>
+        </article>
+
+        <article class="timeline-item" data-era="eng-usa-return">
+          <div class="timeline-top">
+            <span class="timeline-year">2020 – 2023</span>
+            <span class="timeline-country">イタリア / セリエA（帰還）</span>
+          </div>
+          <h3 class="timeline-club">ACミラン（AC Milan）</h3>
+          <p class="timeline-desc">
+            38歳で古巣ミランへ電撃復帰。精神的支柱として若きチームを牽引し、2021-22シーズンに11年ぶりのスクデット獲得を達成。2023年6月、サン・シーロで現役引退を発表した。
+          </p>
+          <div class="timeline-honors">★ セリエA優勝（2021-22）/ セリエA最年長得点記録樹立（41歳166日）</div>
+        </article>
+
+        <article class="timeline-item" data-era="all">
+          <div class="timeline-top">
+            <span class="timeline-year">2001 – 2023</span>
+            <span class="timeline-country">スウェーデン代表</span>
+          </div>
+          <h3 class="timeline-club">スウェーデン代表（Sweden National Team）</h3>
+          <p class="timeline-desc">
+            通算122試合出場・62得点（同国代表歴代最多得点）。2012年イングランド戦で見せたゴールから約30メートルの驚愕オーバーヘッド弾はFIFAプスカシュ賞を受賞した。
+          </p>
+          <div class="timeline-honors">★ スウェーデン年間最優秀選手賞 12回受賞 / 2013年 FIFAプスカシュ賞</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Quotes -->
+    <section id="quotes">
+      <div class="section-header">
+        <span class="section-tag">Zlatanisms</span>
+        <h2 class="section-title">世界を震わせたズラタンの格言</h2>
+        <div class="divider"></div>
+      </div>
+
+      <!-- Spotlight -->
+      <div class="quote-spotlight" id="quote-spotlight">
+        <span class="spotlight-badge">本日のズラタンの格言 // ZLATAN QUOTE</span>
+        <p class="spotlight-ja" id="spotlight-ja">「俺は王としてやって来て、伝説として去る。」</p>
+        <p class="spotlight-en" id="spotlight-en">"I came like a king, left like a legend."</p>
+        <p class="spotlight-context" id="spotlight-context">
+          2016年5月、パリ・サンジェルマン退団を発表した際にSNSへ投稿した歴史的メッセージ。宣言通りの圧倒的実績を残してパリを去った。
+        </p>
+        <div class="spotlight-controls">
+          <button class="btn-gold" id="random-quote-btn" type="button">別の格言を引く</button>
+          <button class="btn-outline" id="copy-spotlight-btn" type="button">この格言をコピー</button>
+        </div>
+      </div>
+
+      <!-- Archive Grid -->
+      <div class="quotes-grid" id="quotes-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>ZLATAN IBRAHIMOVIĆ — THE KING &amp; LEGEND</strong>
+    <p>Tribute Website — Career Chronicle &amp; Iconic Zlatanisms</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">クリップボードにコピーしました</div>
+
+  <script>
+    const quotesData = [
+      {
+        ja: "「俺は王としてやって来て、伝説として去る。」",
+        en: "I came like a king, left like a legend.",
+        context: "2016年5月、パリ・サンジェルマン退団を発表した際にSNSへ投稿した歴史的メッセージ。宣言通りの圧倒的実績を残してパリを去った。",
+        tag: "2016 / PSG退団時"
+      },
+      {
+        ja: "「ズラタンはオーディションを受けない。」",
+        en: "Zlatan doesn't do auditions.",
+        context: "17歳当時、名門アーセナルのアーセン・ヴェンゲル監督からトライアル（入団テスト）参加を打診された際に言い放った伝説の一言。",
+        tag: "2000 / アーセナル打診時"
+      },
+      {
+        ja: "「ライオンは自分と人間を比較しない。」",
+        en: "Lions don't compare themselves to humans.",
+        context: "プレミアリーグの他のトップストライカーたちと自分との比較を求められた記者に対して、即座に返した名言。",
+        tag: "2017 / イングランド時代"
+      },
+      {
+        ja: "「俺のいないワールドカップなど見る価値がない。」",
+        en: "One thing is for sure, a World Cup without me is nothing to watch.",
+        context: "2014年ブラジルW杯欧州予選プレーオフでポルトガルに敗れ、本大会出場を逃した直後のインタビューでのコメント。",
+        tag: "2013 / W杯予選後"
+      },
+      {
+        ja: "「年齢を重ねるほど良くなる。まるで赤ワインのように。」",
+        en: "The older I get, the better I get, like red wine!",
+        context: "35歳を超えても欧州トップリーグでゴールを量産し続け、衰え知らずの活躍を見せた際に語った言葉。",
+        tag: "2016 / マンチェスター・U時代"
+      },
+      {
+        ja: "「フェラーリを買ったのに、フィアットのように運転している。」",
+        en: "When you buy me, you are buying a Ferrari. If you drive a Ferrari you put premium fuel in the tank.",
+        context: "バルセロナ時代、自身のプレースタイルを活かしきれない起用法について例えた有名なフレーズ。",
+        tag: "2010 / バルセロナ時代"
+      },
+      {
+        ja: "「ロサンゼルスよ、どういたしまして。」",
+        en: "Dear Los Angeles, you're welcome.",
+        context: "LAギャラクシー加入時、ロサンゼルス・タイムズ紙に自費で全面広告を出して掲載した究極の自己紹介メッセージ。",
+        tag: "2018 / LAギャラクシー加入時"
+      },
+      {
+        ja: "「サン・シーロに別れを告げる時が来た。フットボールに別れを告げる時が来た。」",
+        en: "It's time to say goodbye to football, not to you.",
+        context: "2023年6月4日、満員のサン・シーロで行われた現役引退セレモニーにて、涙を浮かべながらファンへ捧げた最後の言葉。",
+        tag: "2023 / 現役引退セレモニー"
+      }
+    ];
+
+    let currentQuoteIndex = 0;
+
+    const spotlightJa = document.getElementById("spotlight-ja");
+    const spotlightEn = document.getElementById("spotlight-en");
+    const spotlightContext = document.getElementById("spotlight-context");
+    const quotesGrid = document.getElementById("quotes-grid");
+    const toast = document.getElementById("toast");
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("格言をクリップボードにコピーしました");
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        showToast("格言をクリップボードにコピーしました");
+      } catch (e) {
+        showToast("コピーに失敗しました");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function setSpotlight(index) {
+      currentQuoteIndex = index;
+      const q = quotesData[index];
+      spotlightJa.textContent = q.ja;
+      spotlightEn.textContent = `"${q.en}"`;
+      spotlightContext.textContent = q.context;
+    }
+
+    // Render quote cards
+    quotesData.forEach((q, idx) => {
+      const card = document.createElement("article");
+      card.className = "quote-card";
+      card.innerHTML = `
+        <div>
+          <div class="quote-mark">“</div>
+          <p class="quote-card-ja">${q.ja}</p>
+          <p class="quote-card-en">"${q.en}"</p>
+        </div>
+        <div class="quote-card-footer">
+          <span>${q.tag}</span>
+          <button type="button" class="copy-mini-btn" data-index="${idx}">コピー</button>
+        </div>
+      `;
+
+      card.addEventListener("click", (e) => {
+        if (e.target.classList.contains("copy-mini-btn")) {
+          e.stopPropagation();
+          copyText(`${q.ja} (${q.en}) — ズラタン・イブラヒモビッチ`);
+          return;
+        }
+        setSpotlight(idx);
+        document.getElementById("quote-spotlight").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      quotesGrid.appendChild(card);
+    });
+
+    // Random quote button
+    document.getElementById("random-quote-btn").addEventListener("click", () => {
+      let nextIndex = currentQuoteIndex;
+      while (nextIndex === currentQuoteIndex && quotesData.length > 1) {
+        nextIndex = Math.floor(Math.random() * quotesData.length);
+      }
+      setSpotlight(nextIndex);
+    });
+
+    // Copy spotlight button
+    document.getElementById("copy-spotlight-btn").addEventListener("click", () => {
+      const q = quotesData[currentQuoteIndex];
+      copyText(`${q.ja} (${q.en}) — ズラタン・イブラヒモビッチ`);
+    });
+
+    // Career filter buttons
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const timelineItems = document.querySelectorAll(".timeline-item");
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const filter = btn.dataset.filter;
+        timelineItems.forEach((item) => {
+          if (filter === "all" || item.dataset.era === filter || item.dataset.era === "all") {
+            item.classList.remove("hidden");
+          } else {
+            item.classList.add("hidden");
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("Saved index.html, size:", os.path.getsize("index.html"))
